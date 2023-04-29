@@ -17,7 +17,7 @@ const thoughtsSchema = new Schema(
     },
     text: {
       type: String,
-      minLength: 15,
+      minLength: 5,
       maxLength: 500,
     },
   },
@@ -37,7 +37,7 @@ thoughtsSchema
     return this.meta.upvotes;
   });
 
-// Initialize our Post model
-const Thoughts = model('post', thoughtsSchema);
+// Initialize our Thoughts model
+const Thoughts = model('thoughts', thoughtsSchema);
 
 module.exports = Post;

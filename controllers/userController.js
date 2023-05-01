@@ -34,7 +34,7 @@ module.exports = {
   // PUT to update a user by id
   async updateUser (req , res){
     try {
-      const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      const user = await User.findByIdAndUpdate(req.params.userId, req.body, { new: true });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -47,7 +47,7 @@ module.exports = {
   // Delete to remove user by id
   async deleteUser (req, res) {
     try {
-      const user = await User.findByIdAndDelete(req.params.id);
+      const user = await User.findByIdAndDelete(req.params.userId);
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
@@ -58,7 +58,6 @@ module.exports = {
     }
   }
 };
-
 
 
 

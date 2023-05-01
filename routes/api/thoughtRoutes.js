@@ -3,6 +3,8 @@ const {
   getSingleThoughts,
   getThoughts,
   createThoughts,
+  deleteThoughts,
+  updateThoughts,
 } = require('../../controllers/thoughtsController');
 
 router.route('/').get(getThoughts).post(createThoughts);

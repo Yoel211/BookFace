@@ -1,5 +1,5 @@
 const { connect, connection } = require('mongoose');
 
-connect('mongodb://localhost/fullnameVirtual');
+connect('mongodb://localhost/BookFace');
 
 module.exports = connection;

@@ -11,7 +11,7 @@ module.exports = {
   },
   async getSingleThoughts(req, res) {
     try {
-      const thoughts = await Thought.findOne({ _id: req.params.postId });
+      const thoughts = await Thought.findOne({ _id: req.params.thoughtId });
 
       if (!thoughts) {
         return res.status(404).json({ message: 'No thoughts with that ID' });
@@ -22,13 +22,13 @@ module.exports = {
       res.status(500).json(err)
     }
   },
-  // create a new post
+  // create a new thought
   async createThoughts(req, res) {
     try {
       const thoughts = await Thought.create(req.body);
       const user = await User.findOneAndUpdate(
         { _id: req.body.userId },
-        { $addToSet: { posts: post._id } },
+        { $addToSet: { thoughts: thoughts._id } },
         { new: true }
       );
 
@@ -44,37 +44,69 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  async updateThoughts (res, req) {
+  async updateThoughts (req , res){
     try {
-      const { thoughtText } = req.body;
-      const updatedThought = await Thought.findByIdAndUpdate(
-        req.params.id,
-        { thoughtText },
-        { new: true }
-      );
-      if (!updatedThought) {
-        return res.status(404).json({ error: 'Thought not found' });
-      }
-      res.json(updatedThought);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Failed to update thought' });
+      const updateThought = await Thought.findByIdAndUpdate(req.params.thoughtId, req.body, { new: true });
+    if (!updateThought) {
+      return res.status(404).json({ message: 'Thought not found' });
     }
+    res.json(updateThought);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+    }
+  // async updateThoughts (res, req) {
+  //   try {
+  //     // const { thoughtText } = req.body;
+  //     const updatedThought = await Thought.findByIdAndUpdate(
+  //       req.params.thoughtId,
+  //       // { thoughtText },
+  //       { new: true }
+  //     ).select('-__v');
+  //     if (!updatedThought) {
+  //       return res.status(404).json({ error: 'Thought not found' });
+  //     }
+  //     res.json(updatedThought);
+  //   } catch (err) {
+  //     console.error(err);
+  //     res.status(500).json({ error: 'Failed to update thought' });
+  //   }
   },
-  async deleteThought (res, req) {
+  async deleteThoughts (req, res) {
     try {
-      const deletedThought = await Thought.findByIdAndDelete(req.params.id);
+      const deletedThought = await Thought.findByIdAndDelete(req.params.thoughtId);
       if (!deletedThought) {
-        return res.status(404).json({ error: 'Thought not found' });
+        return res.status(404).json({ message: 'Thought not found' });
       }
-      await User.findByIdAndUpdate(deletedThought.user, { $pull: { thoughts: deletedThought._id } });
-      res.json(deletedThought);
+      res.json({ message: 'Thought deleted successfully' });
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'Failed to delete thought' });
+      res.status(500).json(err);
     }
+  // async deleteThoughts (res, req) {
+  //   try {
+  //     const deletedThought = await Thought.findByIdAndDelete(req.params.thoughtId);
+  //     if (!deletedThought) {
+  //       return res.status(404).json({ error: 'Thought not found' });
+  //     }
+  //     await User.findOneAndUpdate(deletedThought.user, { $pull: { thoughts: deletedThought._id } });
+  //     res.json(deletedThought);
+  //   } catch (err) {
+  //     console.error(err);
+  //     res.status(500).json({ error: 'Failed to delete thought' });
+  //   }
   }
 };
+
+
+
+
+
+
+
+
+
+
 
 
 // PUT to update a thought by its _id
